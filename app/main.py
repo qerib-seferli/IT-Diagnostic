@@ -14,11 +14,11 @@ def cfg():
 
 class App:
  def __init__(self,root):
-  self.root=root;root.title('IT Diagnostic Pro — Portable | Dövlət Su Ehtiyatları Agentliyi');root.geometry('760x650');root.minsize(640,550)
+  self.root=root;root.title('IT Diagnostic — Portable | Dövlət Su Ehtiyatları Agentliyi');root.geometry('760x650');root.minsize(640,550)
   self.c=cfg();self.fields={};self.report=None
   f=ttk.Frame(root,padding=20);f.pack(fill='both',expand=True)
   ttk.Label(f,text='AZƏRBAYCAN DÖVLƏT SU EHTİYATLARI AGENTLİYİ',font=('Segoe UI',12,'bold')).pack(anchor='w')
-  ttk.Label(f,text='IT DIAGNOSTIC PRO',font=('Segoe UI',19,'bold')).pack(anchor='w')
+  ttk.Label(f,text='IT DIAGNOSTIC',font=('Segoe UI',19,'bold')).pack(anchor='w')
   ttk.Label(f,text='Kompüter diaqnostikası və inventar qeydiyyatı',foreground='#666').pack(anchor='w',pady=(0,12))
   form=ttk.Frame(f);form.pack(fill='x')
   for i,(key,label) in enumerate([('organization','İdarənin tam adı *'),('organization_short','İdarənin qısa adı'),('employee','Ad, soyad, ata adı *'),('position','Vəzifə'),('department','Şöbə'),('room','Otaq'),('enrollment_code','İdarə qeydiyyat kodu (mərkəzi göndəriş üçün)')]):
