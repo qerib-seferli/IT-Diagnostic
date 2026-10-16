@@ -83,6 +83,28 @@ class App:
     def label(self, parent, text, size=10, color=NAVY, bold=False, **kwargs):
         return tk.Label(parent, text=text, bg=parent.cget('bg'), fg=color, font=('Segoe UI', size, 'bold' if bold else 'normal'), **kwargs)
 
+    def fix_windows_character(self, event):
+        """Recover a Unicode character if Tk reports '?' for the active Windows layout."""
+        if os.name != 'nt' or event.char != '?' or not event.keycode:
+            return
+        try:
+            import ctypes
+            from ctypes import wintypes
+            user32 = ctypes.WinDLL('user32', use_last_error=True)
+            state = (ctypes.c_ubyte * 256)()
+            if not user32.GetKeyboardState(state):
+                return
+            layout = user32.GetKeyboardLayout(0)
+            result = ctypes.create_unicode_buffer(8)
+            user32.ToUnicodeEx.argtypes = [wintypes.UINT, wintypes.UINT, ctypes.POINTER(ctypes.c_ubyte), wintypes.LPWSTR, ctypes.c_int, wintypes.UINT, ctypes.c_void_p]
+            user32.ToUnicodeEx.restype = ctypes.c_int
+            n = user32.ToUnicodeEx(event.keycode, 0, state, result, 8, 0, layout)
+            if n == 1 and result.value in 'Əə':
+                event.widget.insert('insert', result.value)
+                return 'break'
+        except (OSError, ValueError, AttributeError):
+            return
+
     def build(self):
         shell = tk.Frame(self.root, bg=BG)
         shell.pack(fill='both', expand=True, padx=12, pady=10)
@@ -96,7 +118,7 @@ class App:
             except tk.TclError:
                 self.logo = None
         title = tk.Frame(header, bg=WHITE)
-        title.pack(side='left', fill='x', expand=True, padx=(8, 0))
+        title.pack(side='right', padx=(0, 8))
         tk.Label(title, text='IT DIAGNOSTIC', font=('Segoe UI', 18, 'bold'), fg=NAVY, bg=WHITE).pack(anchor='center', pady=(2, 0))
         tk.Label(title, text='Kompüter diaqnostikası və inventar qeydiyyatı', font=('Segoe UI', 9), fg=MUTED, bg=WHITE).pack(anchor='center')
 
@@ -126,6 +148,7 @@ class App:
             else:
                 widget = ttk.Entry(form, style='App.TEntry', show='•' if key == 'enrollment_code' else '')
                 if key != 'enrollment_code':
+                    widget.bind('<KeyPress>', self.fix_windows_character)
                     widget.insert(0, self.c.get(key, ''))
                 if key == 'organization_short':
                     widget.configure(state='readonly')
