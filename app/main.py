@@ -91,7 +91,7 @@ class App:
             except tk.TclError:
                 self.logo = None
         title = tk.Frame(header, bg=WHITE)
-        title.pack(side='left', fill='x', expand=True)
+        title.pack(side='right', fill='x', expand=True, padx=(28, 0))
         tk.Label(title, text='IT DIAGNOSTIC', font=('Segoe UI', 20, 'bold'), fg=NAVY, bg=WHITE).pack(anchor='w', pady=(2, 0))
         tk.Label(title, text='Kompüter diaqnostikası və inventar qeydiyyatı', font=('Segoe UI', 9), fg=MUTED, bg=WHITE).pack(anchor='w')
 
@@ -102,13 +102,13 @@ class App:
         form.pack(fill='x')
         form.columnconfigure(1, weight=1)
         names = [
-            ('organization', 'İdarənin tam adı *'),
-            ('organization_short', 'İdarənin qısa adı'),
+            ('organization', 'Təşkilatın tam adı *'),
+            ('organization_short', 'Təşkilatın qısa adı'),
             ('employee', 'Ad, soyad, ata adı *'),
             ('position', 'Vəzifə'),
             ('department', 'Şöbə'),
             ('room', 'Otaq'),
-            ('enrollment_code', 'İdarə qeydiyyat kodu'),
+            ('enrollment_code', 'Təşkilat qeydiyyat kodu'),
         ]
         for i, (key, label) in enumerate(names):
             self.label(form, label, 10, MUTED, bold=(key in ('organization', 'employee'))).grid(row=i, column=0, sticky='w', pady=2, padx=(0, 12))
@@ -127,7 +127,6 @@ class App:
             widget.grid(row=i, column=1, sticky='ew', pady=2)
             self.fields[key] = widget
         self.organization_changed()
-        self.label(card, 'Təşkilatı seçin — qısa ad avtomatik doldurulur.', 9, MUTED).pack(anchor='w', pady=(5, 0))
 
         actions = tk.Frame(shell, bg=BG)
         actions.pack(fill='x', pady=(2, 6))
@@ -173,7 +172,7 @@ class App:
     def begin(self):
         v = self.values()
         if v['organization'] not in self.orgs or not v['employee']:
-            messagebox.showwarning('Məlumat çatışmır', 'İdarəni siyahıdan seçin və əməkdaşın adını daxil edin.')
+            messagebox.showwarning('Məlumat çatışmır', 'Təşkilatı siyahıdan seçin və əməkdaşın adını daxil edin.')
             return
         self.report = None
         self.send.configure(state='disabled')
