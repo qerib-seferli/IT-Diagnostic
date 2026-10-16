@@ -14,9 +14,9 @@ def cfg():
 
 class App:
  def __init__(self,root):
-  self.root=root;root.title('IT Diagnostic — Portable | Dövlət Su Ehtiyatları Agentliyi');root.geometry('760x650');root.minsize(640,550)
+  self.root=root;root.title('IT Diagnostic — Portable | Dövlət Su Ehtiyatları Agentliyi');root.geometry('900x730');root.minsize(760,620);root.configure(bg='#eef3f9')
   self.c=cfg();self.fields={};self.report=None
-  f=ttk.Frame(root,padding=20);f.pack(fill='both',expand=True)
+  f=ttk.Frame(root,padding=24);f.pack(fill='both',expand=True)
   ttk.Label(f,text='AZƏRBAYCAN DÖVLƏT SU EHTİYATLARI AGENTLİYİ',font=('Segoe UI',12,'bold')).pack(anchor='w')
   ttk.Label(f,text='IT DIAGNOSTIC',font=('Segoe UI',19,'bold')).pack(anchor='w')
   ttk.Label(f,text='Kompüter diaqnostikası və inventar qeydiyyatı',foreground='#666').pack(anchor='w',pady=(0,12))
@@ -32,7 +32,7 @@ class App:
   self.send=ttk.Button(buttons,text='Bazaya göndər',command=self.upload,state='disabled');self.send.pack(side='left')
   self.status=tk.StringVar(value='Hazırdır. Diaqnostika yalnız bu kompüterdə aparılır.')
   ttk.Label(f,textvariable=self.status,wraplength=700).pack(anchor='w')
-  self.text=tk.Text(f,height=17,wrap='word',font=('Consolas',9));self.text.pack(fill='both',expand=True,pady=(8,0))
+  self.text=tk.Text(f,height=17,wrap='word',font=('Consolas',10),background='#f8fafc',foreground='#172b4d',relief='flat',padx=12,pady=12);self.text.pack(fill='both',expand=True,pady=(8,0))
   self.text.insert('end','Yalnız icazəli kompüterlərdə istifadə edin. Məlumatları göndərməzdən əvvəl yoxlayın.\n');self.text.configure(state='disabled')
  def values(self):return {k:v.get().strip() for k,v in self.fields.items()}
  def begin(self):
@@ -43,11 +43,13 @@ class App:
  def worker(self,v):
   try:
    report=scan();report['registration']={k:value for k,value in v.items() if k!='enrollment_code'}
-   self.report=report;self.root.after(0,lambda:self.done(report))
+   self.root.after(0,lambda:self.done(report))
   except Exception as e:self.root.after(0,lambda:self.fail(str(e)))
  def done(self,report):
-  self.start.configure(state='normal');self.save.configure(state='normal');self.send.configure(state='normal')
-  self.status.set('Diaqnostika tamamlandı. Hesabatı yoxlayın, sonra saxlayın və ya göndərin.')
+  self.report=report;self.start.configure(state='normal');self.save.configure(state='normal')
+  failed=isinstance(report.get('data'),dict) and bool(report['data'].get('error'))
+  self.send.configure(state='disabled' if failed else 'normal')
+  self.status.set('Diaqnostika xətası: hesabatı saxlayıb yoxlayın; göndəriş dayandırıldı.' if failed else 'Diaqnostika tamamlandı. Hesabatı yoxlayın, sonra saxlayın və ya göndərin.')
   self.text.configure(state='normal');self.text.delete('1.0','end');self.text.insert('end',json.dumps(report,ensure_ascii=False,indent=2,default=str));self.text.configure(state='disabled')
  def fail(self,e):self.start.configure(state='normal');self.status.set('Xəta: '+e)
  def export(self):
@@ -56,20 +58,30 @@ class App:
   if path:Path(path).write_text(json.dumps(self.report,ensure_ascii=False,indent=2),encoding='utf-8');messagebox.showinfo('Hazırdır','Hesabat saxlanıldı.')
  def upload(self):
   if not self.report:return
+  if isinstance(self.report.get('data'),dict) and self.report['data'].get('error'):
+   messagebox.showerror('Diaqnostika xətası','Natamam hesabat göndərilmir. Yenidən diaqnostika aparın.');return
   v=self.values();url=self.c.get('ingest_url','').strip()
   if not url or not url.startswith('https://'):messagebox.showwarning('Konfiqurasiya','config.json faylında ingest_url HTTPS ünvanını yazın.');return
   if not v['enrollment_code']:messagebox.showwarning('Kod tələb olunur','İdarənin qeydiyyat kodunu daxil edin.');return
   if not messagebox.askyesno('Təsdiq','Diaqnostika məlumatları və daxil etdiyiniz əməkdaş məlumatları mərkəzi bazaya göndərilsin?'):return
-  self.send.configure(state='disabled');self.status.set('Məlumatlar göndərilir...')
+  self.send.configure(state='disabled');self.status.set('Məlumatlar göndərilir... (maksimum 15 saniyə)')
   threading.Thread(target=self.sender,args=(url,v['enrollment_code']),daemon=True).start()
  def sender(self,url,code):
   try:
    payload=json.dumps({'code':code,'report':self.report},ensure_ascii=False).encode('utf-8')
    req=urllib.request.Request(url,data=payload,headers={'Content-Type':'application/json','apikey':self.c.get('anon_key',''),'Authorization':'Bearer '+self.c.get('anon_key','')},method='POST')
-   with urllib.request.urlopen(req,timeout=25) as res:result=res.read().decode('utf-8')
+   with urllib.request.urlopen(req,timeout=15) as res:result=res.read().decode('utf-8')
    self.root.after(0,lambda:self.upload_done('Göndərildi: '+result[:200]))
+  except urllib.error.HTTPError as e:
+   details=e.read(600).decode('utf-8',errors='replace')
+   self.root.after(0,lambda:self.upload_done('Server xətası HTTP '+str(e.code)+': '+details))
   except Exception as e:self.root.after(0,lambda:self.upload_done('Göndərmə xətası: '+str(e)))
  def upload_done(self,msg):self.send.configure(state='normal');self.status.set(msg)
 
 if __name__=='__main__':
- root=tk.Tk();style=ttk.Style();style.theme_use('clam' if 'clam' in style.theme_names() else style.theme_use());App(root);root.mainloop()
+ root=tk.Tk();style=ttk.Style();style.theme_use('clam' if 'clam' in style.theme_names() else style.theme_use())
+ style.configure('.',font=('Segoe UI',10),background='#eef3f9',foreground='#152b49')
+ style.configure('TButton',padding=(13,9),font=('Segoe UI',10,'bold'),background='#dbe7f6',foreground='#15395c')
+ style.map('TButton',background=[('active','#c5dbf4')])
+ style.configure('TEntry',padding=6,fieldbackground='#ffffff')
+ App(root);root.mainloop()

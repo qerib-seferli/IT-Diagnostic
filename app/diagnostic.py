@@ -3,8 +3,8 @@ from pathlib import Path
 
 def powershell(script):
     try:
-        p=subprocess.run(['powershell.exe','-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-Command',script],capture_output=True,text=True,timeout=65,encoding='utf-8',errors='replace',creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
-        if p.returncode: return {'error':p.stderr.strip()[:250]}
+        p=subprocess.run(['powershell.exe','-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-EncodedCommand',__import__('base64').b64encode(script.encode('utf-16le')).decode('ascii')],capture_output=True,text=True,timeout=65,encoding='utf-8',errors='replace',creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
+        if p.returncode: return {'error':(p.stderr.strip() or p.stdout.strip())[:1000]}
         return json.loads(p.stdout.strip().lstrip('\ufeff'))
     except Exception as e:return {'error':str(e)}
 
@@ -47,7 +47,12 @@ $fw=TryCmd Get-NetFirewallProfile @() | Select-Object Name,Enabled
 $boot=TryCmd Confirm-SecureBootUEFI @()
 $bitlocker=TryCmd Get-BitLockerVolume @() | Select-Object MountPoint,ProtectionStatus,VolumeStatus
 $physical=TryCmd Get-PhysicalDisk @() | Select-Object FriendlyName,MediaType,HealthStatus,OperationalStatus,Size
-$health=if(Get-Command Get-StorageReliabilityCounter -ErrorAction SilentlyContinue){ Get-StorageReliabilityCounter -PhysicalDisk $physical } | Select-Object DeviceId,Temperature,ReadErrorsTotal,WriteErrorsTotal,Wear
+$health=@()
+if(Get-Command Get-StorageReliabilityCounter -ErrorAction SilentlyContinue){
+ foreach($pd in @(Get-PhysicalDisk -ErrorAction SilentlyContinue)){
+  try { $health+= @(Get-StorageReliabilityCounter -PhysicalDisk $pd -ErrorAction Stop | Select-Object DeviceId,Temperature,ReadErrorsTotal,WriteErrorsTotal,Wear) } catch {}
+ }
+}
 $logon=(Wmi Win32_OperatingSystem).LastBootUpTime
 $dnsTest=$false; $internet=$false; $gateway=$false
 $diskMedia=@(); foreach($d in @($disks)) { $diskMedia+= [pscustomobject]@{Index=$d.Index; Model=$d.Model; InterfaceType=$d.InterfaceType; MediaType=$d.MediaType; Size=$d.Size} }
