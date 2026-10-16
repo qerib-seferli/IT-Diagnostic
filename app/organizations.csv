@@ -1,0 +1,118 @@
+﻿short_name,name,category,level,parent,status
+ADSEA,Azərbaycan Dövlət Su Ehtiyatları Agentliyi,Baş qurum,Baş qurum,,Aktiv
+İSST,İri Şəhərlərin Birləşmiş Su Təchizatı Xidməti,Mərkəzi tabeli qurumlar,Mərkəzi qurum,,Aktiv
+Gəncə şəhər Sukanal İdarəsi,Gəncə şəhər Sukanal İdarəsi,Mərkəzi tabeli qurumlar,Şəhər idarəsi,İSST,Aktiv
+Mingəçevir şəhər Sukanal İdarəsi,Mingəçevir şəhər Sukanal İdarəsi,Mərkəzi tabeli qurumlar,Şəhər idarəsi,İSST,Aktiv
+Sumqayıt şəhər Sukanal İdarəsi,Sumqayıt şəhər Sukanal İdarəsi,Mərkəzi tabeli qurumlar,Şəhər idarəsi,İSST,Aktiv
+Şirvan şəhər Sukanal İdarəsi,Şirvan şəhər Sukanal İdarəsi,Mərkəzi tabeli qurumlar,Şəhər idarəsi,İSST,Aktiv
+RSMX,Regional Su Meliorasiya Xidməti,Mərkəzi tabeli qurumlar,Mərkəzi qurum,,Aktiv
+SİMDNX,Suların İstifadəsinə və Mühafizəsinə Dövlət Nəzarəti Xidməti,Mərkəzi tabeli qurumlar,Mərkəzi qurum,,Aktiv
+SMETİ,Su və Meliorasiya Elmi Tədqiqat İnstitutu,Mərkəzi tabeli qurumlar,Mərkəzi qurum,,Aktiv
+SMKLİ,Su və Meliorasiya Komplekslərinin Layihələndirilməsi İnstitutu,Mərkəzi tabeli qurumlar,Mərkəzi qurum,,Aktiv
+TOOM,Tikilməkdə Olan Obyektlərin Müdiriyyəti,Mərkəzi tabeli qurumlar,Mərkəzi qurum,,Aktiv
+Qarabağ SMSİİ,Qarabağ Su Meliorasiya Sistemləri İstismarı İdarəsi,Regional bölmələr,Regional səviyyə,,Aktiv
+SDNX Abşeron-Xızı RB,2 saylı Abşeron-Xızı regional bölməsi,Regional bölmələr,Regional səviyyə,,Aktiv
+SDNX Bakı RB,1 saylı Bakı regional bölməsi,Regional bölmələr,Regional səviyyə,,Aktiv
+SDNX Dağlıq Şirvan RB,3 saylı Dağlıq Şirvan regional bölməsi,Regional bölmələr,Regional səviyyə,,Aktiv
+SDNX Gəncə-Daşkəsən RB,10 saylı Gəncə-Daşkəsən regional bölməsi,Regional bölmələr,Regional səviyyə,,Aktiv
+SDNX Qarabağ RB,7 saylı Qarabağ regional bölməsi,Regional bölmələr,Regional səviyyə,,Aktiv
+SDNX Qazax-Tovuz RB,9 saylı Qazax-Tovuz regional bölməsi,Regional bölmələr,Regional səviyyə,,Aktiv
+SDNX Quba-Xaçmaz RB,13 saylı Quba-Xaçmaz regional bölməsi,Regional bölmələr,Regional səviyyə,,Aktiv
+SDNX Lənkəran-Astara RB,5 saylı Lənkəran-Astara regional bölməsi,Regional bölmələr,Regional səviyyə,,Aktiv
+SDNX Mərkəzi Aran RB,11 saylı Mərkəzi Aran regional bölməsi,Regional bölmələr,Regional səviyyə,,Aktiv
+SDNX Mil-Muğan RB,6 saylı Mil-Muğan regional bölməsi,Regional bölmələr,Regional səviyyə,,Aktiv
+SDNX Naxçıvan RB,14 saylı Naxçıvan regional bölməsi,Regional bölmələr,Regional səviyyə,,Aktiv
+SDNX Şəki-Zaqatala RB,12 saylı Şəki-Zaqatala regional bölməsi,Regional bölmələr,Regional səviyyə,,Aktiv
+SDNX Şərqi Zəngəzur RB,8 saylı Şərqi Zəngəzur regional bölməsi,Regional bölmələr,Regional səviyyə,,Aktiv
+SDNX Şirvan-Salyan RB,4 saylı Şirvan-Salyan regional bölməsi,Regional bölmələr,Regional səviyyə,,Aktiv
+Abşeron SMSİİ,Abşeron Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Ağcabədi SMSİİ,Ağcabədi Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Ağdam SMSİİ,Ağdam Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Ağdaş SMSİİ,Ağdaş Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Ağdərə SMSİİ,Ağdərə Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Ağstafa SMSİİ,Ağstafa Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Ağsu SMSİİ,Ağsu Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Astara SMSİİ,Astara Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Balakən SMSİİ,Balakən Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Beyləqan SMSİİ,Beyləqan Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Bərdə SMSİİ,Bərdə Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Biləsuvar SMSİİ,Biləsuvar Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Cəbrayıl SMSİİ,Cəbrayıl Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Cəlilabad SMSİİ,Cəlilabad Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Daşkəsən SMSİİ,Daşkəsən Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Füzuli SMSİİ,Füzuli Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Gədəbəy SMSİİ,Gədəbəy Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Goranboy SMSİİ,Goranboy Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Göyçay SMSİİ,Göyçay Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Göygöl SMSİİ,Göygöl Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Hacıqabul SMSİİ,Hacıqabul Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Xaçmaz SMSİİ,Xaçmaz Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Xızı SMSİİ,Xızı Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Xocavənd SMSİİ,Xocavənd Su Meliorasiya Sistemlərinin İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+İmişli SMSİİ,İmişli Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+İsmayıllı SMSİİ,İsmayıllı Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Kəlbəcər SMSİİ,Kəlbəcər Su Meliorasiya Sistemlərinin İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Kürdəmir SMSİİ,Kürdəmir Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Qax SMSİİ,Qax Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Qazax SMSİİ,Qazax Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Qəbələ SMSİİ,Qəbələ Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Qobustan SMSİİ,Qobustan Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Quba SMSİİ,Quba Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Qubadlı SMSİİ,Qubadlı Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Qusar SMSİİ,Qusar Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Laçın SMSİİ,Laçın Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Lerik SMSİİ,Lerik Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Lənkəran SMSİİ,Lənkəran Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Masallı SMSİİ,Masallı Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Naftalan SMSİİ,Naftalan Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Naxçıvan SMSİİ,Naxçıvan Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Babək Su Meliorasiya Sistemlərinin İstismarı Şöbəsi,Babək Su Meliorasiya Sistemlərinin İstismarı Şöbəsi,Rayon idarələri,Tabeli şöbə,Naxçıvan SMSİİ,Aktiv
+Culfa Su Meliorasiya Sistemlərinin İstismarı Şöbəsi,Culfa Su Meliorasiya Sistemlərinin İstismarı Şöbəsi,Rayon idarələri,Tabeli şöbə,Naxçıvan SMSİİ,Aktiv
+Kəngərli Su Meliorasiya Sistemlərinin İstismarı Şöbəsi,Kəngərli Su Meliorasiya Sistemlərinin İstismarı Şöbəsi,Rayon idarələri,Tabeli şöbə,Naxçıvan SMSİİ,Aktiv
+Ordubad Su Meliorasiya Sistemlərinin İstismarı Şöbəsi,Ordubad Su Meliorasiya Sistemlərinin İstismarı Şöbəsi,Rayon idarələri,Tabeli şöbə,Naxçıvan SMSİİ,Aktiv
+Sədərək Su Meliorasiya Sistemlərinin İstismarı Şöbəsi,Sədərək Su Meliorasiya Sistemlərinin İstismarı Şöbəsi,Rayon idarələri,Tabeli şöbə,Naxçıvan SMSİİ,Aktiv
+Şahbuz Su Meliorasiya Sistemlərinin İstismarı Şöbəsi,Şahbuz Su Meliorasiya Sistemlərinin İstismarı Şöbəsi,Rayon idarələri,Tabeli şöbə,Naxçıvan SMSİİ,Aktiv
+Şərur Su Meliorasiya Sistemlərinin İstismarı Şöbəsi,Şərur Su Meliorasiya Sistemlərinin İstismarı Şöbəsi,Rayon idarələri,Tabeli şöbə,Naxçıvan SMSİİ,Aktiv
+Neftçala SMSİİ,Neftçala Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Oğuz SMSİİ,Oğuz Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Saatlı SMSİİ,Saatlı Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Sabirabad SMSİİ,Sabirabad Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Salyan SMSİİ,Salyan Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Samux SMSİİ,Samux Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Siyəzən SMSİİ,Siyəzən Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Şabran SMSİİ,Şabran Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Şamaxı SMSİİ,Şamaxı Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Şəki SMSİİ,Şəki Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Şəmkir SMSİİ,Şəmkir Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Tərtər SMSİİ,Tərtər Su Meliorasiya Sistemlərinin İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Tovuz SMSİİ,Tovuz Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Ucar SMSİİ,Ucar Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Yardımlı SMSİİ,Yardımlı Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Yevlax SMSİİ,Yevlax Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Zaqatala SMSİİ,Zaqatala Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Zəngilan SMSİİ,Zəngilan Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Zərdab SMSİİ,Zərdab Su Meliorasiya Sistemləri İstismarı İdarəsi,Rayon idarələri,Rayon səviyyəsi,,Aktiv
+Ağstafaçay Hİİ,Ağstafaçay Hidroqovuşağının İstismarı İdarəsi,Xüsusi və tabeli idarələr,Tabeli / xüsusi,,Aktiv
+Anbar Tİ,Anbar Təsərrüfatı İdarəsi,Xüsusi və tabeli idarələr,Tabeli / xüsusi,,Aktiv
+Aşağı Muğan MSİİ,Aşağı Muğan Meliorativ Sistemlərin İstismarı İdarəsi,Xüsusi və tabeli idarələr,Tabeli / xüsusi,,Aktiv
+Bakı Sukanal,“Bakı Sukanal” İdarəsi,Xüsusi və tabeli idarələr,Tabeli / xüsusi,,Aktiv
+Baş Şirvan Kİİ,Baş Şirvan Kollektorunun İstismarı İdarəsi,Xüsusi və tabeli idarələr,Tabeli / xüsusi,,Aktiv
+Bəhrəmtəpə Hİİ,Bəhrəmtəpə Hidroqovşağının İstismarı İdarəsi,Xüsusi və tabeli idarələr,Tabeli / xüsusi,,Aktiv
+BMMKİİ,Baş Mil-Muğan Kollektorunun İstismar İdarəsi,Xüsusi və tabeli idarələr,Tabeli / xüsusi,,Aktiv
+Kür-Araz Bİİ,Kür-Araz Çaylarında Bəndlərin İstismarı İdarəsi,Xüsusi və tabeli idarələr,Tabeli / xüsusi,,Aktiv
+Qarabağ SKİİ,Qarabağ Suvarma Kanalı İstismar İdarəsi,Xüsusi və tabeli idarələr,Tabeli / xüsusi,,Aktiv
+Mərkəzi Muğan Kİİ,Mərkəzi Muğan Kollektorlarının İstismarı İdarəsi,Xüsusi və tabeli idarələr,Tabeli / xüsusi,,Aktiv
+Mil-Qarabağ-Aşağı Şirvan Kİİ,Mil Qarabağ və Aşağı Şirvan Kollektorunun İstismarı İdarəsi,Xüsusi və tabeli idarələr,Tabeli / xüsusi,,Aktiv
+Mil-Muğan Hİİ,Mil-Muğan Hidroqovuşağının İstismarı İdarəsi,Xüsusi və tabeli idarələr,Tabeli / xüsusi,,Aktiv
+NÖCİ,Nəzarət Ölçü Cihazları İdarəsi,Xüsusi və tabeli idarələr,Tabeli / xüsusi,,Aktiv
+SAKİİ,Samur-Abşeron Kanalının İstismarı İdarəsi,Xüsusi və tabeli idarələr,Tabeli / xüsusi,,Aktiv
+SEDAM MMC,SEDAM MMC,Xüsusi və tabeli idarələr,Tabeli / xüsusi,,Aktiv
+SİMDNX Mərkəzi Lab,Mərkəzi Laboratoriya,Xüsusi və tabeli idarələr,Tabeli / xüsusi,,Aktiv
+SMETİ Abşeron TTS,Abşeron Təcrübə-Tədqiqat Stansiyası,Xüsusi və tabeli idarələr,Tabeli / xüsusi,,Aktiv
+SMETİ Muğan TTS,Muğan Təcrübə-Tədqiqat Stansiyası,Xüsusi və tabeli idarələr,Tabeli / xüsusi,,Aktiv
+SMETİ Şirvan TTS,Şirvan Təcrübə-Tədqiqat Stansiyası,Xüsusi və tabeli idarələr,Tabeli / xüsusi,,Aktiv
+SMETİ TİM,Təlim və İnnovasiyalar Mərkəzi,Xüsusi və tabeli idarələr,Tabeli / xüsusi,,Aktiv
+Su Anbarları İİ,Su Anbarlarının istismarı idarəsi,Xüsusi və tabeli idarələr,Tabeli / xüsusi,,Aktiv
+Şəmkir MKİİ,Şəmkir Maşın-Kanal istismarı İdarəsi,Xüsusi və tabeli idarələr,Tabeli / xüsusi,,Aktiv
+Şirvan SKİİ,Şirvan Suvarma Kanalı İstismarı İdarəsi,Xüsusi və tabeli idarələr,Tabeli / xüsusi,,Aktiv
+Tərtərçay Hİİ,Tərtərçay Hidroqovşağının İstismarı İdarəsi,Xüsusi və tabeli idarələr,Tabeli / xüsusi,,Aktiv
