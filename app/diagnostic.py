@@ -3,7 +3,7 @@ from pathlib import Path
 
 def powershell(script):
     try:
-        p=subprocess.run(['powershell.exe','-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-EncodedCommand',__import__('base64').b64encode(script.encode('utf-16le')).decode('ascii')],capture_output=True,text=True,timeout=65,encoding='utf-8',errors='replace',creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
+        p=subprocess.run(['powershell.exe','-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-EncodedCommand',__import__('base64').b64encode(script.encode('utf-16le')).decode('ascii')],capture_output=True,text=True,timeout=110,encoding='utf-8-sig',errors='replace',creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
         if p.returncode: return {'error':(p.stderr.strip() or p.stdout.strip())[:1000]}
         return json.loads(p.stdout.strip().lstrip('\ufeff'))
     except Exception as e:return {'error':str(e)}
@@ -17,6 +17,8 @@ def device_identity():
 
 def scan():
     script=r'''
+[Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false)
+$OutputEncoding = [Console]::OutputEncoding
 $ErrorActionPreference='SilentlyContinue'
 function Wmi($class,$namespace='root/cimv2') { Get-WmiObject -Class $class -Namespace $namespace -ErrorAction SilentlyContinue }
 function TryCmd($name,$args) { if(Get-Command $name -ErrorAction SilentlyContinue){ & $name @args } }

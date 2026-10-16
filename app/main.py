@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
-import json, os, sys, threading, urllib.request, urllib.error, csv
+import json, os, sys, threading, urllib.request, urllib.error, csv, socket, time
 from pathlib import Path
 from diagnostic import scan
 
@@ -23,7 +23,11 @@ def organizations():
     result = {r['name'].strip(): r['short_name'].strip() for r in rows if r.get('status') == 'Aktiv' and r.get('name')}
     if len(result) != 117:
         raise ValueError('Təşkilat siyahısı natamamdır (117 tələb olunur).')
-    return dict(sorted(result.items(), key=lambda item: item[0].casefold()))
+    alphabet = 'aabcçdeəfgğhxıijkqlmnoöprsştuüvyz'
+    def az_key(item):
+        text = item[0].casefold()
+        return tuple((alphabet.index(ch) if ch in alphabet else 100 + ord(ch), ch) for ch in text)
+    return dict(sorted(result.items(), key=az_key))
 
 BG = '#edf3fa'
 WHITE = '#ffffff'
@@ -35,15 +39,17 @@ BORDER = '#dce5f0'
 class App:
     def __init__(self, root):
         self.root = root
-        self.root.title('IT Diagnostic  |  Azərbaycan Dövlət Su Ehtiyatları Agentliyi')
-        self.root.geometry('1020x790')
-        self.root.minsize(790, 670)
+        self.root.title('IT Diagnostic')
+        self.root.geometry('920x690')
+        self.root.minsize(760, 610)
         self.root.configure(bg=BG)
         self.c = cfg()
         self.fields = {}
         self.report = None
         self.orgs = organizations()
         self.logo = None
+        self.upload_seq = 0
+        self.upload_active = False
         self.setup_styles()
         self.build()
 
@@ -51,12 +57,12 @@ class App:
         s = ttk.Style(self.root)
         if 'clam' in s.theme_names():
             s.theme_use('clam')
-        s.configure('App.TCombobox', font=('Segoe UI', 10), padding=8, fieldbackground=WHITE, background=WHITE, foreground=NAVY)
+        s.configure('App.TCombobox', font=('Segoe UI', 10), padding=4, fieldbackground=WHITE, background=WHITE, foreground=NAVY)
         s.map('App.TCombobox', fieldbackground=[('readonly', WHITE)], foreground=[('readonly', NAVY)])
-        s.configure('App.TEntry', font=('Segoe UI', 10), padding=8, fieldbackground=WHITE, foreground=NAVY)
-        s.configure('Primary.TButton', font=('Segoe UI', 10, 'bold'), padding=(15, 11), background=BLUE, foreground=WHITE, borderwidth=0)
+        s.configure('App.TEntry', font=('Segoe UI', 10), padding=4, fieldbackground=WHITE, foreground=NAVY)
+        s.configure('Primary.TButton', font=('Segoe UI', 10, 'bold'), padding=(11, 7), background=BLUE, foreground=WHITE, borderwidth=0)
         s.map('Primary.TButton', background=[('active', '#0b56bc'), ('disabled', '#b7c9dd')], foreground=[('disabled', '#f7faff')])
-        s.configure('Secondary.TButton', font=('Segoe UI', 10, 'bold'), padding=(15, 11), background='#e5effa', foreground=NAVY, borderwidth=0)
+        s.configure('Secondary.TButton', font=('Segoe UI', 10, 'bold'), padding=(11, 7), background='#e5effa', foreground=NAVY, borderwidth=0)
         s.map('Secondary.TButton', background=[('active', '#d2e3f7'), ('disabled', '#e8edf3')], foreground=[('disabled', '#98a8ba')])
 
     def label(self, parent, text, size=10, color=NAVY, bold=False, **kwargs):
@@ -64,26 +70,24 @@ class App:
 
     def build(self):
         shell = tk.Frame(self.root, bg=BG)
-        shell.pack(fill='both', expand=True, padx=22, pady=18)
-        header = tk.Frame(shell, bg=NAVY, padx=22, pady=16)
+        shell.pack(fill='both', expand=True, padx=14, pady=12)
+        header = tk.Frame(shell, bg=WHITE, padx=14, pady=8, highlightbackground=BORDER, highlightthickness=1)
         header.pack(fill='x')
         logo_path = BUNDLE / 'logo.png'
         if logo_path.exists():
             try:
                 self.logo = tk.PhotoImage(file=str(logo_path))
-                tk.Label(header, image=self.logo, bg=NAVY).pack(side='left', padx=(0, 18))
+                tk.Label(header, image=self.logo, bg=WHITE).pack(side='left', padx=(0, 16))
             except tk.TclError:
                 self.logo = None
-        title = tk.Frame(header, bg=NAVY)
+        title = tk.Frame(header, bg=WHITE)
         title.pack(side='left', fill='x', expand=True)
-        tk.Label(title, text='AZƏRBAYCAN DÖVLƏT SU EHTİYATLARI AGENTLİYİ', font=('Segoe UI', 10, 'bold'), fg='#c6d8f1', bg=NAVY).pack(anchor='w')
-        tk.Label(title, text='IT DIAGNOSTIC', font=('Segoe UI', 23, 'bold'), fg=WHITE, bg=NAVY).pack(anchor='w', pady=(2, 0))
-        tk.Label(title, text='Kompüter diaqnostikası və inventar qeydiyyatı', font=('Segoe UI', 10), fg='#c6d8f1', bg=NAVY).pack(anchor='w')
-        tk.Label(header, text='PORTABLE  •  WINDOWS', font=('Segoe UI', 9, 'bold'), fg='#c6d8f1', bg=NAVY).pack(side='right', anchor='n')
+        tk.Label(title, text='IT DIAGNOSTIC', font=('Segoe UI', 20, 'bold'), fg=NAVY, bg=WHITE).pack(anchor='w', pady=(2, 0))
+        tk.Label(title, text='Kompüter diaqnostikası və inventar qeydiyyatı', font=('Segoe UI', 9), fg=MUTED, bg=WHITE).pack(anchor='w')
 
-        card = tk.Frame(shell, bg=WHITE, padx=22, pady=16, highlightbackground=BORDER, highlightthickness=1)
-        card.pack(fill='x', pady=(14, 10))
-        self.label(card, 'Təşkilat və əməkdaş məlumatları', 13, bold=True).pack(anchor='w', pady=(0, 12))
+        card = tk.Frame(shell, bg=WHITE, padx=16, pady=9, highlightbackground=BORDER, highlightthickness=1)
+        card.pack(fill='x', pady=(8, 6))
+        self.label(card, 'Təşkilat və əməkdaş məlumatları', 11, bold=True).pack(anchor='w', pady=(0, 6))
         form = tk.Frame(card, bg=WHITE)
         form.pack(fill='x')
         form.columnconfigure(1, weight=1)
@@ -97,7 +101,7 @@ class App:
             ('enrollment_code', 'İdarə qeydiyyat kodu'),
         ]
         for i, (key, label) in enumerate(names):
-            self.label(form, label, 10, MUTED, bold=(key in ('organization', 'employee'))).grid(row=i, column=0, sticky='w', pady=5, padx=(0, 20))
+            self.label(form, label, 10, MUTED, bold=(key in ('organization', 'employee'))).grid(row=i, column=0, sticky='w', pady=2, padx=(0, 12))
             if key == 'organization':
                 widget = ttk.Combobox(form, values=list(self.orgs), state='readonly', style='App.TCombobox')
                 widget.bind('<<ComboboxSelected>>', self.organization_changed)
@@ -110,36 +114,33 @@ class App:
                     widget.insert(0, self.c.get(key, ''))
                 if key == 'organization_short':
                     widget.configure(state='readonly')
-            widget.grid(row=i, column=1, sticky='ew', pady=5)
+            widget.grid(row=i, column=1, sticky='ew', pady=2)
             self.fields[key] = widget
         self.organization_changed()
-        self.label(card, '117 aktiv təşkilatdan birini seçin. Qısa ad avtomatik doldurulur.', 9, MUTED).pack(anchor='w', pady=(9, 0))
+        self.label(card, 'Təşkilatı seçin — qısa ad avtomatik doldurulur.', 9, MUTED).pack(anchor='w', pady=(5, 0))
 
         actions = tk.Frame(shell, bg=BG)
-        actions.pack(fill='x', pady=(2, 9))
+        actions.pack(fill='x', pady=(2, 6))
         self.start = ttk.Button(actions, text='▶  Diaqnostikanı başlat', command=self.begin, style='Primary.TButton')
         self.start.pack(side='left', padx=(0, 8))
-        self.save = ttk.Button(actions, text='↓  JSON hesabatını saxla', command=self.export, state='disabled', style='Secondary.TButton')
-        self.save.pack(side='left', padx=(0, 8))
         self.send = ttk.Button(actions, text='↑  Bazaya göndər', command=self.upload, state='disabled', style='Secondary.TButton')
         self.send.pack(side='left')
 
         panel = tk.Frame(shell, bg=WHITE, highlightbackground=BORDER, highlightthickness=1)
         panel.pack(fill='both', expand=True)
-        top = tk.Frame(panel, bg=WHITE, padx=16, pady=12)
+        top = tk.Frame(panel, bg=WHITE, padx=12, pady=6)
         top.pack(fill='x')
         self.label(top, 'Diaqnostika hesabatı', 12, bold=True).pack(side='left')
         self.status = tk.StringVar(value='Hazırdır. Diaqnostika yalnız bu kompüterdə aparılır.')
-        tk.Label(panel, textvariable=self.status, font=('Segoe UI', 10), bg='#eaf3ff', fg='#164e96', anchor='w', padx=15, pady=10, wraplength=890, justify='left').pack(fill='x', padx=12, pady=(0, 10))
-        area = tk.Frame(panel, bg=WHITE, padx=12, pady=2)
+        tk.Label(panel, textvariable=self.status, font=('Segoe UI', 9), bg='#eaf3ff', fg='#164e96', anchor='w', padx=10, pady=6, wraplength=800, justify='left').pack(fill='x', padx=8, pady=(0, 5))
+        area = tk.Frame(panel, bg=WHITE, padx=8, pady=2)
         area.pack(fill='both', expand=True)
         scroll = ttk.Scrollbar(area)
         scroll.pack(side='right', fill='y')
-        self.text = tk.Text(area, height=9, wrap='word', font=('Consolas', 10), bg='#f7faff', fg=NAVY, relief='flat', padx=13, pady=13, yscrollcommand=scroll.set)
+        self.text = tk.Text(area, height=12, wrap='word', font=('Consolas', 10), bg='#f7faff', fg=NAVY, relief='flat', padx=13, pady=13, yscrollcommand=scroll.set)
         self.text.pack(fill='both', expand=True)
         scroll.configure(command=self.text.yview)
         self.set_text('Yalnız icazəli kompüterlərdə istifadə edin. Məlumatları göndərməzdən əvvəl yoxlayın.\n')
-        self.label(shell, 'Məlumatlar yalnız təsdiqdən sonra göndərilir  •  Qeydiyyat kodu hesabatda saxlanılmır', 9, MUTED).pack(anchor='w', pady=(9, 0))
 
     def set_text(self, value):
         self.text.configure(state='normal')
@@ -165,7 +166,6 @@ class App:
             messagebox.showwarning('Məlumat çatışmır', 'İdarəni siyahıdan seçin və əməkdaşın adını daxil edin.')
             return
         self.report = None
-        self.save.configure(state='disabled')
         self.send.configure(state='disabled')
         self.start.configure(state='disabled')
         self.status.set('Diaqnostika aparılır. Bir qədər gözləyin...')
@@ -182,10 +182,9 @@ class App:
     def done(self, report):
         self.report = report
         self.start.configure(state='normal')
-        self.save.configure(state='normal')
         failed = isinstance(report.get('data'), dict) and bool(report['data'].get('error'))
         self.send.configure(state='disabled' if failed else 'normal')
-        self.status.set('Diaqnostika xətası: hesabatı saxlayıb yoxlayın; göndəriş dayandırıldı.' if failed else 'Diaqnostika tamamlandı. Hesabatı yoxlayın, sonra saxlayın və ya göndərin.')
+        self.status.set('Diaqnostika xətası: hesabatı yoxlayın; göndəriş dayandırıldı.' if failed else 'Diaqnostika tamamlandı. Hesabatı yoxlayın, sonra saxlayın və ya göndərin.')
         self.set_text(json.dumps(report, ensure_ascii=False, indent=2, default=str))
 
     def fail(self, error):
@@ -208,8 +207,8 @@ class App:
             return
         v = self.values()
         original = self.report.get('registration', {})
-        if v['organization'] != original.get('organization') or v['employee'] != original.get('employee'):
-            messagebox.showwarning('Məlumat dəyişib', 'Təşkilat və ya əməkdaş məlumatları dəyişib. Yenidən diaqnostika aparın.')
+        if any(v[k] != original.get(k, '') for k in ('organization', 'organization_short', 'employee', 'position', 'department', 'room')):
+            messagebox.showwarning('Məlumat dəyişib', 'Qeydiyyat məlumatları dəyişib. Yenidən diaqnostika aparın.')
             return
         url = self.c.get('ingest_url', '').strip()
         if not url or not url.startswith('https://'):
@@ -220,24 +219,40 @@ class App:
             return
         if not messagebox.askyesno('Təsdiq', 'Diaqnostika məlumatları və daxil etdiyiniz əməkdaş məlumatları mərkəzi bazaya göndərilsin?'):
             return
+        if self.upload_active:
+            return
+        self.upload_active = True
+        self.upload_seq += 1
+        seq = self.upload_seq
         self.send.configure(state='disabled')
-        self.status.set('Məlumatlar göndərilir... (maksimum 15 saniyə)')
-        threading.Thread(target=self.sender, args=(url, v['enrollment_code']), daemon=True).start()
+        self.status.set('Məlumatlar göndərilir...')
+        payload_report = json.loads(json.dumps(self.report, ensure_ascii=False, default=str))
+        threading.Thread(target=self.sender, args=(url, v['enrollment_code'], payload_report, seq), daemon=True).start()
+        self.root.after(20000, lambda: self.upload_timeout(seq))
 
-    def sender(self, url, code):
+    def upload_timeout(self, seq):
+        if self.upload_active and seq == self.upload_seq:
+            self.upload_active = False
+            self.send.configure(state='normal')
+            self.status.set('20 saniyə ərzində cavab alınmadı. Serverdə qeydin yaranıb-yaranmadığını yoxlayın; təkrar göndərməzdən əvvəl nəticəni dəqiqləşdirin.')
+
+    def sender(self, url, code, report, seq):
         try:
-            payload = json.dumps({'code': code, 'report': self.report}, ensure_ascii=False).encode('utf-8')
+            payload = json.dumps({'code': code, 'report': report}, ensure_ascii=False).encode('utf-8')
             req = urllib.request.Request(url, data=payload, headers={'Content-Type': 'application/json', 'apikey': self.c.get('anon_key', ''), 'Authorization': 'Bearer ' + self.c.get('anon_key', '')}, method='POST')
-            with urllib.request.urlopen(req, timeout=15) as res:
+            with urllib.request.urlopen(req, timeout=12) as res:
                 result = res.read().decode('utf-8')
-            self.root.after(0, lambda: self.upload_done('Göndərildi: ' + result[:200]))
+            self.root.after(0, lambda: self.upload_done(seq, 'Məlumatlar bazaya uğurla göndərildi.' if json.loads(result).get('ok') is True else 'Server cavabı: ' + result[:200]))
         except urllib.error.HTTPError as e:
             details = e.read(600).decode('utf-8', errors='replace')
-            self.root.after(0, lambda: self.upload_done('Server xətası HTTP ' + str(e.code) + ': ' + details))
+            self.root.after(0, lambda: self.upload_done(seq, 'Server xətası HTTP ' + str(e.code) + ': ' + details))
         except Exception as e:
-            self.root.after(0, lambda: self.upload_done('Göndərmə xətası: ' + str(e)))
+            self.root.after(0, lambda: self.upload_done(seq, 'Göndərmə xətası: ' + str(e)))
 
-    def upload_done(self, msg):
+    def upload_done(self, seq, msg):
+        if seq != self.upload_seq or not self.upload_active:
+            return
+        self.upload_active = False
         self.send.configure(state='normal')
         self.status.set(msg)
 
