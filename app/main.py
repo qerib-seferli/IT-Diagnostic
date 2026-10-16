@@ -64,6 +64,7 @@ class App:
         self.logo = None
         self.upload_seq = 0
         self.upload_active = False
+        self.upload_success = False
         self.setup_styles()
         self.build()
 
@@ -179,6 +180,7 @@ class App:
             messagebox.showwarning('Məlumat çatışmır', 'Təşkilatı siyahıdan seçin və əməkdaşın adını daxil edin.')
             return
         self.report = None
+        self.upload_success = False
         self.send.configure(state='disabled')
         self.start.configure(state='disabled')
         self.status.set('Diaqnostika aparılır. Bir qədər gözləyin...')
@@ -213,7 +215,7 @@ class App:
             messagebox.showinfo('Hazırdır', 'Hesabat saxlanıldı.')
 
     def upload(self):
-        if not self.report:
+        if not self.report or self.upload_success:
             return
         if isinstance(self.report.get('data'), dict) and self.report['data'].get('error'):
             messagebox.showerror('Diaqnostika xətası', 'Natamam hesabat göndərilmir. Yenidən diaqnostika aparın.')
@@ -268,7 +270,8 @@ class App:
         if seq != self.upload_seq or not self.upload_active:
             return
         self.upload_active = False
-        self.send.configure(state='normal')
+        self.upload_success = msg == 'Məlumatlar bazaya uğurla göndərildi.'
+        self.send.configure(state='disabled' if self.upload_success else 'normal')
         self.status.set(msg)
 
 if __name__ == '__main__':

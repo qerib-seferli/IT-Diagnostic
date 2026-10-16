@@ -18,6 +18,15 @@ Deno.serve(async (req) => {
     const client=createClient(Deno.env.get('SUPABASE_URL')!,Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
     const {data:org,error:lookupError}=await client.rpc('verify_enrollment',{org_name:reg.organization,submitted_code:code as string});
     if(lookupError||!org) return new Response('Invalid organization or code',{status:403});
+    // Repeated submission of the SAME scan must not create a second record.
+    // A fresh diagnostic (different scanned_at) is retained as scan history.
+    if (typeof report.device_id === 'string' && report.device_id && typeof report.scanned_at === 'string') {
+      const { data: existing, error: checkError } = await client.from('computer_scans')
+        .select('id').eq('organization_id', org).eq('device_id', report.device_id.slice(0,80))
+        .eq('scanned_at', report.scanned_at).limit(1);
+      if (checkError) throw checkError;
+      if (existing?.length) return Response.json({ok:true,duplicate:true},{headers:{'Access-Control-Allow-Origin':'*'}});
+    }
     const {error}=await client.from('computer_scans').insert({organization_id:org,hostname:String(report.hostname).slice(0,128),device_id:typeof report.device_id==='string'?report.device_id.slice(0,80):null,employee:String(reg.employee).slice(0,256),department:String(reg.department||'').slice(0,256),position:String(reg.position||'').slice(0,256),room:String(reg.room||'').slice(0,128),scanned_at:report.scanned_at,payload:report});
     if(error) throw error;
     return Response.json({ok:true},{headers:{'Access-Control-Allow-Origin':'*'}});

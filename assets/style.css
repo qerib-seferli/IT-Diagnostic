@@ -12,3 +12,14 @@ main{margin-left:218px;padding:19px 23px}header{margin-bottom:15px}header h1{fon
 .loginCard input,.filters input,.filters select,section input,section select{min-height:35px;padding:7px 10px;border-radius:7px;font-size:12px}.primary,.secondary{padding:8px 12px;border-radius:7px;font-size:12px;min-height:35px}.loginCard>.primary{margin-top:17px}.pass button{font-size:12px;top:3px;bottom:3px}
 .filters{gap:7px;margin-bottom:10px}.filters input{min-width:160px}table{font-size:11px}th,td{padding:9px 7px}td button{padding:5px 8px}.empty{padding:17px}.page input:not(.filters input){margin-bottom:10px}.dialog{padding:16px;border-radius:11px}.detailSection summary{padding:10px 12px}footer{margin-top:16px}
 @media(max-width:680px){aside{width:100%;padding:8px}main{margin:0;padding:12px}nav button{padding:7px;min-height:35px}.stats{gap:7px}.loginCard{padding:19px}.loginHead img{width:110px}}
+
+/* White navigation, official brand artwork unchanged; only presentation */
+aside{background:#fff;color:#172b43;border-right:1px solid #dce4ee}
+.brand{border-bottom:1px solid #e4e9f0;padding:7px 3px 14px}
+.brand img{max-width:194px;max-height:76px;background:#fff;object-fit:contain;border-radius:0}
+nav button{color:#30465f;background:transparent}
+nav button:hover{background:#edf4fc;color:#133f72}
+nav button.active{background:#e7f0fc;color:#1455a1;font-weight:700}
+nav span{background:#edf2f8;color:#35618d;border:1px solid #dce7f3}
+nav button.active span{background:#d6e8fc;color:#165b9f}
+.asidefoot{color:#70849c;border-top:1px solid #e9eef4}
