@@ -96,9 +96,9 @@ class App:
             except tk.TclError:
                 self.logo = None
         title = tk.Frame(header, bg=WHITE)
-        title.pack(side='left', padx=(8, 0))
-        tk.Label(title, text='IT DIAGNOSTIC', font=('Segoe UI', 18, 'bold'), fg=NAVY, bg=WHITE).pack(anchor='w', pady=(2, 0))
-        tk.Label(title, text='Kompüter diaqnostikası və inventar qeydiyyatı', font=('Segoe UI', 9), fg=MUTED, bg=WHITE).pack(anchor='w')
+        title.pack(side='left', fill='x', expand=True, padx=(8, 0))
+        tk.Label(title, text='IT DIAGNOSTIC', font=('Segoe UI', 18, 'bold'), fg=NAVY, bg=WHITE).pack(anchor='center', pady=(2, 0))
+        tk.Label(title, text='Kompüter diaqnostikası və inventar qeydiyyatı', font=('Segoe UI', 9), fg=MUTED, bg=WHITE).pack(anchor='center')
 
         card = tk.Frame(shell, bg=WHITE, padx=13, pady=7, highlightbackground=BORDER, highlightthickness=1)
         card.pack(fill='x', pady=(8, 6))

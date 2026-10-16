@@ -5,7 +5,7 @@ def powershell(script):
     try:
         p=subprocess.run(['powershell.exe','-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-EncodedCommand',__import__('base64').b64encode(script.encode('utf-16le')).decode('ascii')],capture_output=True,text=True,timeout=110,encoding='utf-8-sig',errors='replace',creationflags=getattr(subprocess,'CREATE_NO_WINDOW',0))
         if p.returncode: return {'error':(p.stderr.strip() or p.stdout.strip())[:1000]}
-        return json.loads(p.stdout.strip().lstrip('\ufeff'))
+        return json.loads(__import__('base64').b64decode(p.stdout.strip()).decode('utf-8-sig'))
     except Exception as e:return {'error':str(e)}
 
 def device_identity():
@@ -85,7 +85,7 @@ try{$gw=($net | Where-Object {$_.DefaultIPGateway} | Select-Object -First 1).Def
  bitlocker=Items($bitlocker)
  secure_boot=$boot
  connectivity=@{dns=$dnsTest;internet=$internet;gateway_ping=$gateway;lan_adapter=[bool](@($net).Count -gt 0)}
- } | ConvertTo-Json -Depth 9 -Compress
+ } | ConvertTo-Json -Depth 9 -Compress | ForEach-Object { [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($_)) }
 '''
     data=powershell(script)
     return {'schema_version':2,'scanned_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'hostname':socket.gethostname(),'device_id':device_identity(),'platform':platform.platform(),'data':data}
