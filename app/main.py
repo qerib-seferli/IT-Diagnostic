@@ -29,6 +29,16 @@ def organizations():
         return tuple((alphabet.index(ch) if ch in alphabet else 100 + ord(ch), ch) for ch in text)
     return dict(sorted(result.items(), key=az_key))
 
+def clean_unicode(value):
+    """Remove invalid PostgreSQL text characters without changing Azerbaijani letters."""
+    if isinstance(value, str):
+        return ''.join(ch for ch in value if ch != '\x00' and (ord(ch) >= 32 or ch in '\t\n\r'))
+    if isinstance(value, dict):
+        return {clean_unicode(k): clean_unicode(v) for k, v in value.items()}
+    if isinstance(value, list):
+        return [clean_unicode(v) for v in value]
+    return value
+
 BG = '#edf3fa'
 WHITE = '#ffffff'
 NAVY = '#122943'
@@ -226,7 +236,7 @@ class App:
         seq = self.upload_seq
         self.send.configure(state='disabled')
         self.status.set('Məlumatlar göndərilir...')
-        payload_report = json.loads(json.dumps(self.report, ensure_ascii=False, default=str))
+        payload_report = clean_unicode(json.loads(json.dumps(self.report, ensure_ascii=False, default=str)))
         threading.Thread(target=self.sender, args=(url, v['enrollment_code'], payload_report, seq), daemon=True).start()
         self.root.after(20000, lambda: self.upload_timeout(seq))
 
@@ -238,7 +248,7 @@ class App:
 
     def sender(self, url, code, report, seq):
         try:
-            payload = json.dumps({'code': code, 'report': report}, ensure_ascii=False).encode('utf-8')
+            payload = json.dumps(clean_unicode({'code': code, 'report': report}), ensure_ascii=False).encode('utf-8')
             req = urllib.request.Request(url, data=payload, headers={'Content-Type': 'application/json', 'apikey': self.c.get('anon_key', ''), 'Authorization': 'Bearer ' + self.c.get('anon_key', '')}, method='POST')
             with urllib.request.urlopen(req, timeout=12) as res:
                 result = res.read().decode('utf-8')
