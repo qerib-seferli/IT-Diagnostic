@@ -50,9 +50,13 @@ class App:
     def __init__(self, root):
         self.root = root
         self.root.title('IT Diagnostic')
-        self.root.geometry('920x690')
-        self.root.minsize(760, 610)
+        self.root.geometry('900x665')
+        self.root.minsize(740, 580)
         self.root.configure(bg=BG)
+        try:
+            self.root.iconbitmap(str(BUNDLE / 'app.ico'))
+        except (tk.TclError, OSError):
+            pass
         self.c = cfg()
         self.fields = {}
         self.report = None
@@ -67,12 +71,12 @@ class App:
         s = ttk.Style(self.root)
         if 'clam' in s.theme_names():
             s.theme_use('clam')
-        s.configure('App.TCombobox', font=('Segoe UI', 10), padding=4, fieldbackground=WHITE, background=WHITE, foreground=NAVY)
+        s.configure('App.TCombobox', font=('Segoe UI', 9), padding=3, fieldbackground=WHITE, background=WHITE, foreground=NAVY)
         s.map('App.TCombobox', fieldbackground=[('readonly', WHITE)], foreground=[('readonly', NAVY)])
-        s.configure('App.TEntry', font=('Segoe UI', 10), padding=4, fieldbackground=WHITE, foreground=NAVY)
-        s.configure('Primary.TButton', font=('Segoe UI', 10, 'bold'), padding=(11, 7), background=BLUE, foreground=WHITE, borderwidth=0)
+        s.configure('App.TEntry', font=('Segoe UI', 9), padding=3, fieldbackground=WHITE, foreground=NAVY)
+        s.configure('Primary.TButton', font=('Segoe UI', 9, 'bold'), padding=(9, 5), background=BLUE, foreground=WHITE, borderwidth=0)
         s.map('Primary.TButton', background=[('active', '#0b56bc'), ('disabled', '#b7c9dd')], foreground=[('disabled', '#f7faff')])
-        s.configure('Secondary.TButton', font=('Segoe UI', 10, 'bold'), padding=(11, 7), background='#e5effa', foreground=NAVY, borderwidth=0)
+        s.configure('Secondary.TButton', font=('Segoe UI', 9, 'bold'), padding=(9, 5), background='#e5effa', foreground=NAVY, borderwidth=0)
         s.map('Secondary.TButton', background=[('active', '#d2e3f7'), ('disabled', '#e8edf3')], foreground=[('disabled', '#98a8ba')])
 
     def label(self, parent, text, size=10, color=NAVY, bold=False, **kwargs):
@@ -80,8 +84,8 @@ class App:
 
     def build(self):
         shell = tk.Frame(self.root, bg=BG)
-        shell.pack(fill='both', expand=True, padx=14, pady=12)
-        header = tk.Frame(shell, bg=WHITE, padx=14, pady=8, highlightbackground=BORDER, highlightthickness=1)
+        shell.pack(fill='both', expand=True, padx=12, pady=10)
+        header = tk.Frame(shell, bg=WHITE, padx=12, pady=6, highlightbackground=BORDER, highlightthickness=1)
         header.pack(fill='x')
         logo_path = BUNDLE / 'logo.png'
         if logo_path.exists():
@@ -92,10 +96,10 @@ class App:
                 self.logo = None
         title = tk.Frame(header, bg=WHITE)
         title.pack(side='right', fill='x', expand=True, padx=(28, 0))
-        tk.Label(title, text='IT DIAGNOSTIC', font=('Segoe UI', 20, 'bold'), fg=NAVY, bg=WHITE).pack(anchor='w', pady=(2, 0))
+        tk.Label(title, text='IT DIAGNOSTIC', font=('Segoe UI', 18, 'bold'), fg=NAVY, bg=WHITE).pack(anchor='w', pady=(2, 0))
         tk.Label(title, text='Kompüter diaqnostikası və inventar qeydiyyatı', font=('Segoe UI', 9), fg=MUTED, bg=WHITE).pack(anchor='w')
 
-        card = tk.Frame(shell, bg=WHITE, padx=16, pady=9, highlightbackground=BORDER, highlightthickness=1)
+        card = tk.Frame(shell, bg=WHITE, padx=13, pady=7, highlightbackground=BORDER, highlightthickness=1)
         card.pack(fill='x', pady=(8, 6))
         self.label(card, 'Təşkilat və əməkdaş məlumatları', 11, bold=True).pack(anchor='w', pady=(0, 6))
         form = tk.Frame(card, bg=WHITE)
@@ -111,7 +115,7 @@ class App:
             ('enrollment_code', 'Təşkilat qeydiyyat kodu'),
         ]
         for i, (key, label) in enumerate(names):
-            self.label(form, label, 10, MUTED, bold=(key in ('organization', 'employee'))).grid(row=i, column=0, sticky='w', pady=2, padx=(0, 12))
+            self.label(form, label, 10, MUTED, bold=(key in ('organization', 'employee'))).grid(row=i, column=0, sticky='w', pady=1, padx=(0, 10))
             if key == 'organization':
                 widget = ttk.Combobox(form, values=list(self.orgs), state='readonly', style='App.TCombobox')
                 widget.bind('<<ComboboxSelected>>', self.organization_changed)
@@ -124,7 +128,7 @@ class App:
                     widget.insert(0, self.c.get(key, ''))
                 if key == 'organization_short':
                     widget.configure(state='readonly')
-            widget.grid(row=i, column=1, sticky='ew', pady=2)
+            widget.grid(row=i, column=1, sticky='ew', pady=1)
             self.fields[key] = widget
         self.organization_changed()
 
@@ -224,7 +228,7 @@ class App:
             messagebox.showwarning('Konfiqurasiya', 'config.json faylında ingest_url HTTPS ünvanını yazın.')
             return
         if not v['enrollment_code']:
-            messagebox.showwarning('Kod tələb olunur', 'İdarənin qeydiyyat kodunu daxil edin.')
+            messagebox.showwarning('Kod tələb olunur', 'Təşkilatın qeydiyyat kodunu daxil edin.')
             return
         if not messagebox.askyesno('Təsdiq', 'Diaqnostika məlumatları və daxil etdiyiniz əməkdaş məlumatları mərkəzi bazaya göndərilsin?'):
             return
@@ -237,26 +241,28 @@ class App:
         self.status.set('Məlumatlar göndərilir...')
         payload_report = clean_unicode(json.loads(json.dumps(self.report, ensure_ascii=False, default=str)))
         threading.Thread(target=self.sender, args=(url, v['enrollment_code'], payload_report, seq), daemon=True).start()
-        self.root.after(20000, lambda: self.upload_timeout(seq))
+        self.root.after(26000, lambda: self.upload_timeout(seq))
 
     def upload_timeout(self, seq):
         if self.upload_active and seq == self.upload_seq:
             self.upload_active = False
             self.send.configure(state='normal')
-            self.status.set('20 saniyə ərzində cavab alınmadı. Serverdə qeydin yaranıb-yaranmadığını yoxlayın; təkrar göndərməzdən əvvəl nəticəni dəqiqləşdirin.')
+            self.status.set('26 saniyə ərzində cavab alınmadı. Serverdə qeydin yaranıb-yaranmadığını yoxlayın; təkrar göndərməzdən əvvəl nəticəni dəqiqləşdirin.')
 
     def sender(self, url, code, report, seq):
         try:
             payload = json.dumps(clean_unicode({'code': code, 'report': report}), ensure_ascii=False).encode('utf-8')
             req = urllib.request.Request(url, data=payload, headers={'Content-Type': 'application/json', 'apikey': self.c.get('anon_key', ''), 'Authorization': 'Bearer ' + self.c.get('anon_key', '')}, method='POST')
-            with urllib.request.urlopen(req, timeout=12) as res:
+            with urllib.request.urlopen(req, timeout=18) as res:
                 result = res.read().decode('utf-8')
             self.root.after(0, lambda: self.upload_done(seq, 'Məlumatlar bazaya uğurla göndərildi.' if json.loads(result).get('ok') is True else 'Server cavabı: ' + result[:200]))
         except urllib.error.HTTPError as e:
             details = e.read(600).decode('utf-8', errors='replace')
-            self.root.after(0, lambda: self.upload_done(seq, 'Server xətası HTTP ' + str(e.code) + ': ' + details))
+            error_code = e.code
+            self.root.after(0, lambda error_code=error_code, details=details: self.upload_done(seq, 'Server xətası HTTP ' + str(error_code) + ': ' + details))
         except Exception as e:
-            self.root.after(0, lambda: self.upload_done(seq, 'Göndərmə xətası: ' + str(e)))
+            error_text = str(e)
+            self.root.after(0, lambda error_text=error_text: self.upload_done(seq, 'Göndərmə xətası: ' + error_text))
 
     def upload_done(self, seq, msg):
         if seq != self.upload_seq or not self.upload_active:
