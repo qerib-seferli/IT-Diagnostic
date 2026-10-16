@@ -96,7 +96,7 @@ class App:
             except tk.TclError:
                 self.logo = None
         title = tk.Frame(header, bg=WHITE)
-        title.pack(side='right', fill='x', expand=True, padx=(28, 0))
+        title.pack(side='left', padx=(8, 0))
         tk.Label(title, text='IT DIAGNOSTIC', font=('Segoe UI', 18, 'bold'), fg=NAVY, bg=WHITE).pack(anchor='w', pady=(2, 0))
         tk.Label(title, text='Kompüter diaqnostikası və inventar qeydiyyatı', font=('Segoe UI', 9), fg=MUTED, bg=WHITE).pack(anchor='w')
 
@@ -110,13 +110,13 @@ class App:
             ('organization', 'Təşkilatın tam adı *'),
             ('organization_short', 'Təşkilatın qısa adı'),
             ('employee', 'Ad, soyad, ata adı *'),
-            ('position', 'Vəzifə'),
-            ('department', 'Şöbə'),
-            ('room', 'Otaq'),
-            ('enrollment_code', 'Təşkilat qeydiyyat kodu'),
+            ('position', 'Vəzifə *'),
+            ('department', 'Şöbə *'),
+            ('room', 'Otaq *'),
+            ('enrollment_code', 'Təşkilat qeydiyyat kodu *'),
         ]
         for i, (key, label) in enumerate(names):
-            self.label(form, label, 10, MUTED, bold=(key in ('organization', 'employee'))).grid(row=i, column=0, sticky='w', pady=1, padx=(0, 10))
+            self.label(form, label, 10, MUTED, bold=(key in ('organization', 'employee', 'position', 'department', 'room', 'enrollment_code'))).grid(row=i, column=0, sticky='w', pady=1, padx=(0, 10))
             if key == 'organization':
                 widget = ttk.Combobox(form, values=list(self.orgs), state='readonly', style='App.TCombobox')
                 widget.bind('<<ComboboxSelected>>', self.organization_changed)
@@ -176,8 +176,8 @@ class App:
 
     def begin(self):
         v = self.values()
-        if v['organization'] not in self.orgs or not v['employee']:
-            messagebox.showwarning('Məlumat çatışmır', 'Təşkilatı siyahıdan seçin və əməkdaşın adını daxil edin.')
+        if v['organization'] not in self.orgs or any(not v[k] for k in ('employee', 'position', 'department', 'room', 'enrollment_code')):
+            messagebox.showwarning('Məlumat çatışmır', 'Təşkilatı seçin və ulduzla (*) işarələnmiş bütün sahələri doldurun.')
             return
         self.report = None
         self.upload_success = False

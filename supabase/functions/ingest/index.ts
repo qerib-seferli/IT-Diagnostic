@@ -14,7 +14,7 @@ Deno.serve(async (req) => {
     const {code,report}=cleanText(await req.json()) as {code: unknown;report: any};
     if(typeof code!=='string'||code.length<16||code.length>256||!report||![1,2].includes(report.schema_version)) return new Response('Invalid request',{status:400});
     const reg=report.registration||{};
-    if(!reg.organization||!reg.employee||!report.hostname||JSON.stringify(report).length>1024*1024) return new Response('Invalid report',{status:400});
+    if(!reg.organization||!reg.employee||!reg.position||!reg.department||!reg.room||!report.hostname||JSON.stringify(report).length>1024*1024) return new Response('Invalid report',{status:400});
     const client=createClient(Deno.env.get('SUPABASE_URL')!,Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
     const {data:org,error:lookupError}=await client.rpc('verify_enrollment',{org_name:reg.organization,submitted_code:code as string});
     if(lookupError||!org) return new Response('Invalid organization or code',{status:403});
