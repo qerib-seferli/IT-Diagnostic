@@ -48,3 +48,8 @@ nav .navIcon svg{display:block;width:17px;height:17px}
 .detailBody .historyOlder{color:#ba3030}
 .detailBody .historyActive{background:#eef5ff;box-shadow:inset 3px 0 #3277b9}
 @media(max-width:680px){.historySelectedInfo{float:none;display:block;max-width:100%;margin:6px 0 0;text-align:left}.detailBody .historyEntry{display:flex}}
+
+/* Detail metadata: inset from both edges, matching nested diagnostic sections. */
+.detailBody > .detailRows{padding-left:16px;padding-right:16px}
+.detailBody > .line{margin-left:16px;margin-right:16px}
+@media(max-width:680px){.detailBody > .detailRows{padding-left:12px;padding-right:12px}.detailBody > .line{margin-left:12px;margin-right:12px}}
