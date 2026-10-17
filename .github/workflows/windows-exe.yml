@@ -13,9 +13,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: python -m pip install --upgrade pip && pip install pyinstaller==6.16.0 certifi
-      - run: pyinstaller --noconfirm --clean --onefile --windowed --hidden-import encodings.idna --collect-data certifi --icon app/app.ico --name IT-Diagnostic --add-data "app/config.json;." --add-data "app/logo.png;." --add-data "app/app.ico;." --add-data "app/organizations.csv;." app/main.py
+      - run: python -m pip install --upgrade pip && pip install pyinstaller==6.16.0
+      - run: pyinstaller --noconfirm --clean --onedir --windowed --hidden-import encodings.idna --icon app/app.ico --name IT-Diagnostic --add-data "app/config.json;." --add-data "app/logo.png;." --add-data "app/app.ico;." --add-data "app/organizations.csv;." app/main.py
       - uses: actions/upload-artifact@v4
         with:
           name: IT-Diagnostic-Windows-Portable
-          path: dist/IT-Diagnostic.exe
+          path: dist/IT-Diagnostic/
