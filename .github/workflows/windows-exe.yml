@@ -41,7 +41,7 @@ jobs:
       - name: Build portable one-file executable
         shell: pwsh
         run: |
-          python -m PyInstaller --noconfirm --clean --onefile --windowed --hidden-import encodings.idna --icon app/app.ico --name IT-Diagnostic --add-data "app/config.json;." --add-data "app/logo.png;." --add-data "app/app.ico;." --add-data "app/organizations.csv;." app/main.py
+          python -m PyInstaller --noconfirm --clean --noupx --onefile --windowed --hidden-import encodings.idna --collect-submodules encodings --icon app/app.ico --name IT-Diagnostic --add-data "app/config.json;." --add-data "app/logo.png;." --add-data "app/app.ico;." --add-data "app/organizations.csv;." app/main.py
       - uses: actions/upload-artifact@v4
         with:
           name: IT-Diagnostic-${{ matrix.label }}
