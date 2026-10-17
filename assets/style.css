@@ -40,3 +40,11 @@ main{min-width:0}article{min-width:0}.statLink{display:block;width:100%;text-ali
 /* Consistent vector navigation icons; no functional changes */
 nav .navIcon{display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;width:22px;height:22px;flex-shrink:0}
 nav .navIcon svg{display:block;width:17px;height:17px}
+
+/* Diagnostic history: newest scan versus preserved older scans */
+.historySelectedInfo{float:right;max-width:55%;margin-left:12px;text-align:right;font-size:12px;font-weight:650;color:#1d5e9d;overflow-wrap:anywhere}
+.detailBody .historyEntry{justify-content:flex-start;padding:11px 12px 11px 18px;font-weight:600;white-space:normal;overflow-wrap:anywhere}
+.detailBody .historyNewest{color:#087b48}
+.detailBody .historyOlder{color:#ba3030}
+.detailBody .historyActive{background:#eef5ff;box-shadow:inset 3px 0 #3277b9}
+@media(max-width:680px){.historySelectedInfo{float:none;display:block;max-width:100%;margin:6px 0 0;text-align:left}.detailBody .historyEntry{display:flex}}
