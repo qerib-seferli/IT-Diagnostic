@@ -279,7 +279,8 @@ class App:
             payload = json.dumps(clean_unicode({'code': code, 'report': report}), ensure_ascii=False).encode('utf-8')
             req = urllib.request.Request(url, data=payload, headers={'Content-Type': 'application/json', 'apikey': self.c.get('anon_key', ''), 'Authorization': 'Bearer ' + self.c.get('anon_key', '')}, method='POST')
             # Windows certificate store is used; TLS certificate validation remains enabled.
-            tls_context = ssl.create_default_context()
+            tls_context = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+            tls_context.load_default_certs(ssl.Purpose.SERVER_AUTH)
             with urllib.request.urlopen(req, timeout=18, context=tls_context) as res:
                 result = res.read().decode('utf-8')
             self.root.after(0, lambda: self.upload_done(seq, 'Məlumatlar bazaya uğurla göndərildi.' if json.loads(result).get('ok') is True else 'Server cavabı: ' + result[:200]))
