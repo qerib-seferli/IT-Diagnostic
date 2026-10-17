@@ -42,6 +42,34 @@ jobs:
         shell: pwsh
         run: |
           python -m PyInstaller --noconfirm --clean --noupx --onefile --windowed --hidden-import encodings.idna --collect-submodules encodings --icon app/app.ico --name IT-Diagnostic --add-data "app/config.json;." --add-data "app/logo.png;." --add-data "app/app.ico;." --add-data "app/organizations.csv;." app/main.py
+      - name: Verify executable and generate SHA-256 report
+        shell: pwsh
+        run: |
+          $exe = 'dist/IT-Diagnostic.exe'
+          if (-not (Test-Path $exe)) { throw 'Build EXE not found' }
+          $item = Get-Item $exe
+          if ($item.Length -lt 100000) { throw 'Build EXE is unexpectedly small' }
+          $hash = (Get-FileHash $exe -Algorithm SHA256).Hash
+          $signature = Get-AuthenticodeSignature $exe
+          @(
+            "Variant: ${{ matrix.label }}"
+            "Python: ${{ matrix.python }}"
+            "Architecture: ${{ matrix.arch }}"
+            "PyInstaller: ${{ matrix.pyinstaller }}"
+            "File: IT-Diagnostic.exe"
+            "Bytes: $($item.Length)"
+            "SHA256: $hash"
+            "Authenticode status: $($signature.Status)"
+            'Note: SHA256 is for integrity only. It does not certify malware safety.'
+            'Note: An unsigned EXE can still trigger browser/antivirus alerts.'
+          ) | Set-Content -Path 'dist/build-verification.txt' -Encoding UTF8
+          Get-Content 'dist/build-verification.txt'
+      - name: Upload build verification report
+        uses: actions/upload-artifact@v4
+        with:
+          name: IT-Diagnostic-${{ matrix.label }}-verification
+          path: dist/build-verification.txt
+          if-no-files-found: error
       - uses: actions/upload-artifact@v4
         with:
           name: IT-Diagnostic-${{ matrix.label }}
