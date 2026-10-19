@@ -57,3 +57,12 @@ nav .navIcon svg{display:block;width:17px;height:17px}
 /* Service / repair: readable ticket hierarchy; no changes to storage or status logic */
 .serviceTicket{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:13px 14px;border-bottom:1px solid #e6edf4;min-width:0}
 .serviceTicket:last-child{border-bottom:0}.serviceTicketMain{flex:1;min-width:0}.serviceTicketTop{display:flex;align-items:center;flex-wrap:wrap;gap:6px 11px;line-height:1.5}.serviceTicketHost{font-size:13px;color:#173d69}.serviceTicketOrg{font-size:12px;color:#4d6d92}.serviceTicketEmployee{font-size:12px;font-weight:650;color:#17604c}.serviceTicketEmployee::before{content:'İstifadəçi: ';font-weight:400;color:#64748b}.serviceTicketSubject{font-size:13px;color:#263446;margin-top:5px;overflow-wrap:anywhere}.serviceTicketDate{font-size:11px;color:#71829a;margin-top:6px}.serviceTicket .ticketStatus{width:auto;min-width:105px;max-width:130px;margin:0;flex-shrink:0;font-weight:650}.ticketOpen{color:#a65a0c!important;background:#fff7e9!important}.ticketProgress{color:#1c5da4!important;background:#eef5ff!important}.ticketClosed{color:#17734f!important;background:#eaf8f0!important}@media(max-width:680px){.serviceTicket{align-items:flex-start;flex-direction:column;gap:9px}.serviceTicket .ticketStatus{align-self:flex-end}}
+
+/* Dashboard: six visible diagnostics, remaining records scroll inside card. */
+#recent{max-height:438px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#2b70bd #e9f1fa;padding-right:5px}
+#recent::-webkit-scrollbar{width:8px}#recent::-webkit-scrollbar-track{background:#e9f1fa;border-radius:8px}#recent::-webkit-scrollbar-thumb{background:#2b70bd;border-radius:8px;border:2px solid #e9f1fa}
+#recent .linkedLine{min-height:73px;box-sizing:border-box}
+.recentEmployee,.recentBit{display:block;font-size:11px;color:#506b87;font-weight:400;margin-top:2px}
+.recentEmployee{color:#19644e}
+.osBitRow{display:flex;justify-content:space-between;padding:4px 15px 7px 22px;color:#56728f;font-size:12px}.osBitRow b{color:#1c5c9e}
+.osGroup{border-bottom:1px solid #e7edf4}
