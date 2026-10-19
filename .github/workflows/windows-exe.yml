@@ -43,10 +43,44 @@ jobs:
         shell: pwsh
         run: |
           python -c "import sys, tkinter, _tkinter, ssl; print(sys.version); print('Tcl:', tkinter.TclVersion, 'Tk:', tkinter.TkVersion); print('OpenSSL:', ssl.OPENSSL_VERSION)"
+      # Windows 7 requires the legacy Python 3.8 runtime.  Check the actual
+      # Tcl/Tk and Visual C++ runtime files before building the legacy EXE.
+      - name: Verify legacy Windows runtime files
+        if: contains(matrix.label, 'Windows-7-8.1')
+        shell: pwsh
+        run: |
+          @'
+          import pathlib, sys, _tkinter
+          root = pathlib.Path(sys.base_prefix)
+          dlls = root / 'DLLs'
+          required = [dlls / '_tkinter.pyd', root / 'DLLs' / 'tcl86t.dll', root / 'DLLs' / 'tk86t.dll']
+          for p in required:
+              print(('FOUND: ' if p.exists() else 'MISSING: ') + str(p))
+          if not (dlls / '_tkinter.pyd').exists():
+              raise SystemExit('Tkinter extension is missing')
+          print('Python:', sys.version, 'Tk:', _tkinter.TK_VERSION)
+          '@ | python -
       - name: Build portable one-file executable
         shell: pwsh
         run: |
-          python -m PyInstaller --noconfirm --clean --noupx --onefile --windowed --hidden-import encodings.idna --hidden-import _tkinter --collect-submodules encodings --icon app/app.ico --name IT-Diagnostic --add-data "app/config.json;." --add-data "app/logo.png;." --add-data "app/app.ico;." --add-data "app/organizations.csv;." app/main.py
+          $args = @('--noconfirm','--clean','--noupx','--onefile','--windowed',
+            '--hidden-import','encodings.idna','--hidden-import','_tkinter',
+            '--collect-submodules','encodings','--icon','app/app.ico',
+            '--name','IT-Diagnostic','--add-data','app/config.json;.',
+            '--add-data','app/logo.png;.','--add-data','app/app.ico;.',
+            '--add-data','app/organizations.csv;.')
+          if ('${{ matrix.label }}' -like 'Windows-7-8.1*') {
+            # Explicitly collect the legacy Tcl/Tk binaries. PyInstaller also
+            # collects Tcl/Tk scripts using its tkinter runtime hook.
+            $pyRoot = (python -c 'import sys; print(sys.base_prefix)').Trim()
+            foreach ($dll in @('tcl86t.dll','tk86t.dll')) {
+              $found = @("$pyRoot\DLLs\$dll", "$pyRoot\$dll") | Where-Object { Test-Path $_ } | Select-Object -First 1
+              if ($found) { $args += @('--add-binary',"${found};.") }
+              else { Write-Warning "Legacy runtime DLL not found: $dll" }
+            }
+          }
+          $args += 'app/main.py'
+          python -m PyInstaller @args
       - name: Verify executable and generate SHA-256 report
         shell: pwsh
         run: |
